@@ -17,10 +17,6 @@ public class MessagePackWritable<C> implements WritableComparable<MessagePackWri
     private C obj_ = null;
 
     public MessagePackWritable(C obj) {
-        // TODO: 2010/11/09 Kazuki Ohta <kazuki.ohta@gmail.com>
-        // Make all fields as nullable.
-        MessagePack.register(obj.getClass());
-
         obj_ = obj;
     }
 
@@ -41,10 +37,7 @@ public class MessagePackWritable<C> implements WritableComparable<MessagePackWri
         if (size > 0) {
             byte[] raw = new byte[size];
             in.readFully(raw, 0, size);
-
-            // TODO: 2010/11/09 Kazuki Ohta <kazuki.ohta@gmail.com>
-            // want to supress allocation here by recycling obj_
-            obj_ = (C)MessagePack.unpack(raw, obj_.getClass());
+            MessagePack.unpack(raw, obj_);
         }
     }
 

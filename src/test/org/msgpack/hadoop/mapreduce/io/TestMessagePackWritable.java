@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.msgpack.MessagePack;
 import org.msgpack.hadoop.mapreduce.io.MessagePackWritable;
 
 import org.junit.Test;
@@ -15,6 +16,9 @@ public class TestMessagePackWritable {
     public static class MyClass {
         public String s;
         public int v;
+    }
+    static {
+        MessagePack.register(MyClass.class);
     }
 
     public static class MyClassWritable extends MessagePackWritable<MyClass> {
