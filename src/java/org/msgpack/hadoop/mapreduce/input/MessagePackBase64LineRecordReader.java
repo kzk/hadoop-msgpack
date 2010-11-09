@@ -101,7 +101,6 @@ public class MessagePackBase64LineRecordReader<M, V extends MessagePackWritable<
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public boolean nextKeyValue() throws IOException, InterruptedException {
         while (pos_ <= end_) {
             int newSize = lineReader_.readLine(line_);
@@ -111,7 +110,8 @@ public class MessagePackBase64LineRecordReader<M, V extends MessagePackWritable<
             byte[] lineBytes = line_.toString().getBytes("UTF-8");
 
             long key = pos_;
-            M val = (M)MessagePack.unpack(base64_.decode(lineBytes), val_.get().getClass());
+            M val = val_.get();
+            MessagePack.unpack(base64_.decode(lineBytes), val);
             if (val == null) continue;
 
             key_.set(key);
