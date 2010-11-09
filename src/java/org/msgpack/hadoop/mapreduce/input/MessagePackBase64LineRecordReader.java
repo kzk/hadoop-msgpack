@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.msgpack.MessagePack;
 import org.msgpack.hadoop.mapreduce.io.MessagePackWritable;
 
-public class MessagePackBase64LineRecordReader<K, V extends MessagePackWritable<V>> extends RecordReader<LongWritable, V> {
+public class MessagePackBase64LineRecordReader<M, V extends MessagePackWritable<M>> extends RecordReader<LongWritable, V> {
     private static final Logger LOG = LoggerFactory.getLogger(MessagePackBase64LineRecordReader.class);
 
     private LineReader lineReader_;
@@ -111,7 +111,7 @@ public class MessagePackBase64LineRecordReader<K, V extends MessagePackWritable<
             byte[] lineBytes = line_.toString().getBytes("UTF-8");
 
             long key = pos_;
-            V val = (V)MessagePack.unpack(base64_.decode(lineBytes), val_.getClass());
+            M val = (M)MessagePack.unpack(base64_.decode(lineBytes), val_.get().getClass());
             if (val == null) continue;
 
             key_.set(key);
