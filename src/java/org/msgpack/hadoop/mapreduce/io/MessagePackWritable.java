@@ -25,6 +25,7 @@ public class MessagePackWritable<M> implements WritableComparable<MessagePackWri
     public M get() { return obj_; }
     
     public void write(DataOutput out) throws IOException {
+        assert(obj_ != null);
         byte[] raw = MessagePack.pack(obj_);
         if (raw == null) return;
         out.writeInt(raw.length);
@@ -35,6 +36,7 @@ public class MessagePackWritable<M> implements WritableComparable<MessagePackWri
     public void readFields(DataInput in) throws IOException {
         int size = in.readInt();
         if (size > 0) {
+            assert(obj_ != null);
             byte[] raw = new byte[size];
             in.readFully(raw, 0, size);
             MessagePack.unpack(raw, obj_);

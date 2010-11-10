@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.msgpack.MessagePack;
 import org.msgpack.hadoop.mapreduce.io.MessagePackWritable;
 
-class MessagePackBase64LineRecordWriter<M, W extends MessagePackWritable> extends RecordWriter<NullWritable, W> {
+class MessagePackBase64LineRecordWriter<M, W extends MessagePackWritable<M>> extends RecordWriter<NullWritable, W> {
     protected final Base64 base64_;
     protected final DataOutputStream out_;
     
@@ -23,10 +23,11 @@ class MessagePackBase64LineRecordWriter<M, W extends MessagePackWritable> extend
     }
 
     public void write(NullWritable key, W val) throws IOException, InterruptedException {
-        byte[] raw = MessagePack.pack(val);
+        M obj = val.get();
+        assert(obj != null);
+        byte[] raw = MessagePack.pack(obj);
         byte[] b64Bytes = base64_.encode(raw);
         out_.write(b64Bytes);
-        out_.write("\n".getBytes("UTF-8"));
     }
 
     public void close(TaskAttemptContext taskAttemptContext) throws IOException, InterruptedException {
