@@ -18,16 +18,16 @@ import org.slf4j.LoggerFactory;
 
 import org.msgpack.hadoop.mapreduce.io.MessagePackWritable;
 
-public abstract class MessagePackBase64LineInputFormat<M, V extends MessagePackWritable<M>> extends FileInputFormat<LongWritable, V> {
-    private V writable_;
+public abstract class MessagePackBase64LineInputFormat<M, W extends MessagePackWritable<M>> extends FileInputFormat<LongWritable, W> {
+    private W writable_;
 
-    protected void setMessagePackWritable(V writable) {
+    protected void setMessagePackWritable(W writable) {
         writable_ = writable;
     }
     
     @Override
-    public RecordReader<LongWritable, V> createRecordReader(InputSplit split,
+    public RecordReader<LongWritable, W> createRecordReader(InputSplit split,
         TaskAttemptContext taskAttempt) throws IOException, InterruptedException {
-        return new MessagePackBase64LineRecordReader<M, V>(writable_);
+        return new MessagePackBase64LineRecordReader<M, W>(writable_);
     }
 }

@@ -25,14 +25,14 @@ import org.slf4j.LoggerFactory;
 import org.msgpack.MessagePack;
 import org.msgpack.hadoop.mapreduce.io.MessagePackWritable;
 
-public class MessagePackBase64LineRecordReader<M, V extends MessagePackWritable<M>> extends RecordReader<LongWritable, V> {
+public class MessagePackBase64LineRecordReader<M, W extends MessagePackWritable<M>> extends RecordReader<LongWritable, W> {
     private static final Logger LOG = LoggerFactory.getLogger(MessagePackBase64LineRecordReader.class);
 
     private LineReader lineReader_;
     private final Text line_ = new Text();
 
     private final LongWritable key_ = new LongWritable(0);
-    private final V val_;
+    private final W val_;
     private final Base64 base64_ = new Base64();
 
     protected long start_;
@@ -40,7 +40,7 @@ public class MessagePackBase64LineRecordReader<M, V extends MessagePackWritable<
     protected long end_;
     private FSDataInputStream fileIn_;
 
-    public MessagePackBase64LineRecordReader(V messagePackWritable) {
+    public MessagePackBase64LineRecordReader(W messagePackWritable) {
         val_ = messagePackWritable;
     }
 
@@ -96,7 +96,7 @@ public class MessagePackBase64LineRecordReader<M, V extends MessagePackWritable<
     }
 
     @Override
-    public V getCurrentValue() throws IOException, InterruptedException {
+    public W getCurrentValue() throws IOException, InterruptedException {
         return val_;
     }
 

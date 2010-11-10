@@ -10,19 +10,19 @@ import org.apache.hadoop.io.WritableComparable;
 import org.msgpack.MessagePack;
 
 /**
- * A Hadoop Writable wrapper for MessagePack of type C.
+ * A Hadoop Writable wrapper for MessagePack of type M.
  */
     
-public class MessagePackWritable<C> implements WritableComparable<MessagePackWritable<C>> {
-    private C obj_ = null;
+public class MessagePackWritable<M> implements WritableComparable<MessagePackWritable<M>> {
+    private M obj_ = null;
 
-    public MessagePackWritable(C obj) {
+    public MessagePackWritable(M obj) {
         obj_ = obj;
     }
 
-    public void set(C obj) { obj_ = obj; }
+    public void set(M obj) { obj_ = obj; }
 
-    public C get() { return obj_; }
+    public M get() { return obj_; }
     
     public void write(DataOutput out) throws IOException {
         byte[] raw = MessagePack.pack(obj_);
@@ -42,7 +42,7 @@ public class MessagePackWritable<C> implements WritableComparable<MessagePackWri
     }
 
     @Override
-    public int compareTo(MessagePackWritable<C> other) {
+    public int compareTo(MessagePackWritable<M> other) {
         // TODO: 2010/11/09 Kazuki Ohta <kazuki.ohta@gmail.com>
         // compare without packing
         byte[] raw1 = MessagePack.pack(this.get());
