@@ -13,11 +13,19 @@ import org.msgpack.MessagePack;
  * A Hadoop Writable wrapper for MessagePack of type M.
  */
     
-public class MessagePackWritable<M> implements WritableComparable<MessagePackWritable<M>> {
+public abstract class MessagePackWritable<M> implements WritableComparable<MessagePackWritable<M>> {
     private M obj_ = null;
+
+    protected abstract M getObjectInstance();
+
+    public MessagePackWritable() {
+        obj_ = getObjectInstance();
+        MessagePack.register(obj_.getClass());
+    }
 
     public MessagePackWritable(M obj) {
         obj_ = obj;
+        MessagePack.register(obj_.getClass());
     }
 
     public void set(M obj) { obj_ = obj; }

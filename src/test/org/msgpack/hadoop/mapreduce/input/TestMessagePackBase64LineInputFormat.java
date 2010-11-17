@@ -28,20 +28,12 @@ public class TestMessagePackBase64LineInputFormat extends TestCase {
         public int v;
     }
 
-    static {
-        MessagePack.register(MyClass.class);
-    }
-
     public static class MyClassWritable extends MessagePackWritable<MyClass> {
-        public MyClassWritable() {
-            super(new MyClass());
-        }
+        protected MyClass getObjectInstance() { return new MyClass(); }
     }
 
     public static class MyClassMessagePackBase64LineInputFormat extends MessagePackBase64LineInputFormat<MyClass, MyClassWritable> {
-        public MyClassMessagePackBase64LineInputFormat() {
-            setMessagePackWritable(new MyClassWritable());
-        }
+        protected MyClassWritable getWritableInstance() { return new MyClassWritable(); }
     }
 
     //--------------

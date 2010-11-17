@@ -17,17 +17,9 @@ public class TestMessagePackWritable {
         public String s;
         public int v;
     }
-    static {
-        MessagePack.register(MyClass.class);
-    }
 
     public static class MyClassWritable extends MessagePackWritable<MyClass> {
-        public MyClassWritable() {
-            super(new MyClass());
-        }
-        public MyClassWritable(MyClass obj) {
-            super(obj);
-        }
+        protected MyClass getObjectInstance() { return new MyClass(); }
     }
 
     @Test
@@ -35,7 +27,8 @@ public class TestMessagePackWritable {
         MyClass b = new MyClass();
         b.s = "aiueo";
         b.v = 3;
-        MyClassWritable bw = new MyClassWritable(b);
+        MyClassWritable bw = new MyClassWritable();
+        bw.set(b);
         DataOutputStream dos = new DataOutputStream(new FileOutputStream("test.txt"));
         bw.write(dos);
         dos.close();

@@ -29,31 +29,22 @@ public class TestMessagePackBase64LineOutputFormat extends TestCase {
     private static final Log LOG =
         LogFactory.getLog(TestMessagePackBase64LineOutputFormat.class.getName());
 
+    //--------
     public static class MyClass {
         public String s;
         public int v;
     }
 
-    static {
-        MessagePack.register(MyClass.class);
-    }
-
     public static class MyClassWritable extends MessagePackWritable<MyClass> {
-        public MyClassWritable() {
-            super(new MyClass());
-        }
+        protected MyClass getObjectInstance() { return new MyClass(); }
     }
 
     public static class MyClassMessagePackBase64LineInputFormat extends MessagePackBase64LineInputFormat<MyClass, MyClassWritable> {
-        public MyClassMessagePackBase64LineInputFormat() {
-            setMessagePackWritable(new MyClassWritable());
-        }
+        protected MyClassWritable getWritableInstance() { return new MyClassWritable(); }
     }
 
-    public static class MyClassMessagePackBase64LineOutputFormat extends MessagePackBase64LineOutputFormat<MyClass, MyClassWritable> {
-        public MyClassMessagePackBase64LineOutputFormat() {
-        }
-    }
+    public static class MyClassMessagePackBase64LineOutputFormat extends MessagePackBase64LineOutputFormat<MyClass, MyClassWritable> {}
+    //--------
 
     public void testWrite() throws IOException, InterruptedException {
         Configuration conf = new Configuration();
